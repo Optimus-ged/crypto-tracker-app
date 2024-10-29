@@ -53,6 +53,11 @@ android {
 
 dependencies {
 
+    // ktor client, koin
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
+    implementation(libs.bundles.koin)
+    implementation(libs.bundles.ktor)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
