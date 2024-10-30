@@ -1,4 +1,4 @@
-package com.ygcodding.cryptotracker.crypto.data.models
+package com.ygcodding.cryptotracker.crypto.domain.model
 
 data class Coin(
     val id: String,
