@@ -1,20 +1,24 @@
 package com.ygcodding.cryptotracker
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.ygcodding.cryptotracker.core.presentation.util.ObserveAsEvents
+import com.ygcodding.cryptotracker.core.presentation.util.toString
+import com.ygcodding.cryptotracker.crypto.presentation.coin_list.CoinListEvent
+import com.ygcodding.cryptotracker.crypto.presentation.coin_list.CoinListScreen
+import com.ygcodding.cryptotracker.crypto.presentation.coin_list.CoinListViewModel
 import com.ygcodding.cryptotracker.ui.theme.CryptoTrackerTheme
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,18 +27,26 @@ class MainActivity : ComponentActivity() {
         setContent {
             CryptoTrackerTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .padding(innerPadding)
-                            .fillMaxSize()
-                    ) {
-                        Text(text ="Yala is the\nbest",
-                            textAlign = TextAlign.Center,
+                    val viewModel = koinViewModel<CoinListViewModel>()
+                    val state by viewModel.state.collectAsStateWithLifecycle()
+                    val context = LocalContext.current
 
-                            )
+                    ObserveAsEvents(events = viewModel.events) { event ->
+                        when (event) {
+                            is CoinListEvent.Error -> {
+                                Toast.makeText(
+                                    context,
+                                    event.error.toString(context),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
                     }
+
+                    CoinListScreen(
+                        state = state,
+                        modifier = Modifier.padding(innerPadding)
+                    )
                 }
             }
         }
