@@ -24,7 +24,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "BASE_URL", "\"http://192.168.1.67:3009/v1/\"")
+            buildConfigField("String", "BASE_URL", "\"https://pos-printing-api.faysalcompanyclients.com/v1/\"")
         }
         release {
             isMinifyEnabled = false
@@ -33,7 +33,7 @@ android {
                 "proguard-rules.pro"
             )
 
-            buildConfigField("String", "BASE_URL", "\"http://192.168.1.67:3009/v1/\"")
+            buildConfigField("String", "BASE_URL", "\"https://pos-printing-api.faysalcompanyclients.com/v1/\"")
         }
     }
     compileOptions {
